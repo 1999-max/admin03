@@ -45,7 +45,9 @@ export default {
       return this.$store.state.tagsView.visitedViews
     },
     routes() {
-      return this.$store.state.permission.routes
+      // return this.$store.state.permission.routes
+      return this.$router.options.routes
+      // 因为没有权限控制，直接改成获取全部路由配置信息
     }
   },
   watch: {
@@ -74,23 +76,46 @@ export default {
     },
     filterAffixTags(routes, basePath = '/') {
       let tags = []
-      routes.forEach(route => {
-        if (route.meta && route.meta.affix) {
-          const tagPath = path.resolve(basePath, route.path)
-          tags.push({
-            fullPath: tagPath,
-            path: tagPath,
-            name: route.name,
-            meta: { ...route.meta }
-          })
+      // routes.forEach(route => {
+      //   if (route.meta && route.meta.affix) {
+      //     const tagPath = path.resolve(basePath, route.path)
+      //     tags.push({
+      //       fullPath: tagPath,
+      //       path: tagPath,
+      //       name: route.name,
+      //       meta: { ...route.meta }
+      //     })
+      //   }
+      //   if (route.children) {
+      //     const tempTags = this.filterAffixTags(route.children, route.path)
+      //     if (tempTags.length >= 1) {
+      //       tags = [...tags, ...tempTags]
+      //     }
+      //   }
+      // })
+
+      // 判断是否为空，否则报错
+      if (this.routes) {
+          routes.forEach(route =>{
+            const tagPath = path.resolve(basePath, route.path)
+            // tagPath调整位置
+            if (route.meta && route.meta.affix) {
+              tags.push({
+                fullPath: tagPath,
+                path: tagPath,
+                name: route.name,
+                meta: { ...route.meta }
+              })
+            }
+            if (route.children) {
+              const tempTags = this.filterAffixTags(route.children, route.path)
+              if (tempTags.length >= 1) {
+                tags = [...tags, ...tempTags]
+              }
+            }
+          })//forEach
         }
-        if (route.children) {
-          const tempTags = this.filterAffixTags(route.children, route.path)
-          if (tempTags.length >= 1) {
-            tags = [...tags, ...tempTags]
-          }
-        }
-      })
+
       return tags
     },
     initTags() {

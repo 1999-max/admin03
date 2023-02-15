@@ -1,6 +1,8 @@
 module.exports = {
 
   title: 'LJS11 Vue Admin Template',
+  showSettings: true,
+  tagsView: true,
 
   /**
    * @type {boolean} true | false
@@ -12,5 +14,7 @@ module.exports = {
    * @type {boolean} true | false
    * @description Whether show the logo in sidebar
    */
-  sidebarLogo: false
+  sidebarLogo: false,
+
+  errorLog: 'production'
 }
