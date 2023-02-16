@@ -10,7 +10,9 @@ const getters = {
   cachedViews: state => state.tagsView.cachedViews,
 
   // 权限
-  permission_routes: state => state.permiossion.routes,
+  // permission_routes: state => state.permiossion.routes,
+  permission_routes: state => state.permission.routes,
   roles: state => state.user.roles,
 }
+
 export default getters

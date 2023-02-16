@@ -1,7 +1,7 @@
 import router from './router'
 import store from './store'
 import { Message } from 'element-ui'
-import NProgress from 'nprogress' // progress bar一个进度条的插件
+import NProgress from 'nprogress' // progress bar进度条的插件
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
@@ -36,7 +36,7 @@ router.beforeEach(async (to, from, next) => {
       } else {
         try {
           // get user info
-          // 注意：角色必须是一个对象数组！ such as: ['admin'] or ,['developer','editor']
+          // 注意：角色roles必须是一个对象数组！ such as: ['admin'] or ,['developer','editor']
           const { roles } = await store.dispatch('user/getInfo')
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
 

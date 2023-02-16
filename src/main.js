@@ -19,6 +19,9 @@ import '@/permission' // permission control
 import request from "@/utils/request"
 Vue.prototype.$request = request
 
+// 权限
+// import permission from '@/directive/permission/index.js' // 权限判断指令
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

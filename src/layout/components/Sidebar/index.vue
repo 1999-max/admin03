@@ -31,9 +31,10 @@ export default {
       'sidebar',
       'permission_routes' // 记住
     ]),
-    routes() {
-      return this.$router.options.routes
-    },
+    // routes() {
+    //  return 
+    // // 已经改为permission_routes
+    // },
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
