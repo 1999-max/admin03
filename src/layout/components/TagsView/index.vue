@@ -83,6 +83,7 @@ export default {
             fullPath: tagPath,
             path: tagPath,
             name: route.name,
+            // name: "test",
             meta: { ...route.meta }
           })
         }
@@ -93,6 +94,7 @@ export default {
           }
         }
       })
+
 
       // 判断是否为空，否则报错
       // if (this.routes) {

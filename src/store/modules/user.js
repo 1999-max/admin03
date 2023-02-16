@@ -71,6 +71,7 @@ const actions = {
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
+
         commit('SET_ROLES', roles)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
@@ -83,10 +84,15 @@ const actions = {
     })
   },
 
-  // user logout
+
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
+
+        // 权限
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
+
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')

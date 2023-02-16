@@ -141,9 +141,8 @@ export const constantRoutes = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
-/**
- * asyncRoutes
- */
+
+// asyncRoutes
 export const asyncRoutes = [
   {
     path: '/permission',
@@ -154,7 +153,7 @@ export const asyncRoutes = [
     meta: {
       title: 'Permission',
       icon: 'lock',
-      roles: ['admin', 'editor']
+      roles: ['admin']
     },
     children: [
       {
@@ -163,7 +162,8 @@ export const asyncRoutes = [
         name: 'PagePermission',
         meta: {
           title: 'Page Permission',
-          roles: ['admin']}
+          // roles: ['admin']
+        }
       },
       {
         path: 'directive',
@@ -180,7 +180,7 @@ export const asyncRoutes = [
         name: 'RolePermission',
         meta: {
           title: 'Role Permission',
-          roles: ['admin']
+          // roles: ['editor']
         }
       }
     ]
@@ -196,7 +196,6 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
