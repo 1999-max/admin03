@@ -89,7 +89,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
 
-        // 权限
+        // 权限   清除vuex缓存，初始化用户信息与token
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
 
