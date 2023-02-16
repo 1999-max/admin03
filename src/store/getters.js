@@ -7,6 +7,10 @@ const getters = {
 
   // tagView -- new
   visitedViews: state => state.tagsView.visitedViews,
-  cachedViews: state => state.tagsView.cachedViews
+  cachedViews: state => state.tagsView.cachedViews,
+
+  // 权限
+  permission_routes: state => state.permiossion.routes,
+  roles: state => state.user.roles,
 }
 export default getters

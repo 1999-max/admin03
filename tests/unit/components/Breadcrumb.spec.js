@@ -32,6 +32,7 @@ const routes = [
         path: 'menu1-2',
         name: 'menu1-2',
         redirect: 'noredirect',
+        // 当设置 noRedirect 的时候该路由在面包屑导航Breadcrumb中不可被点击 
         meta: { title: 'menu1-2' },
         children: [{
           path: 'menu1-2-1',

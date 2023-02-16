@@ -55,7 +55,7 @@ module.exports = app => {
   var mockRoutesLength = mockRoutes.mockRoutesLength
   var mockStartIndex = mockRoutes.mockStartIndex
 
-  // watch files, hot reload mock server
+  // 监视文件，热重新加载模拟服务器
   chokidar.watch(mockDir, {
     ignored: /mock-server/,
     ignoreInitial: true

@@ -5,12 +5,14 @@ import NProgress from 'nprogress' // progress bar一个进度条的插件
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
+// 权限
+// import { asyncRoutes } from '@/router'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration是否有转圈效果
 
 const whiteList = ['/login'] // no redirect whitelist没有重定向白名单
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // start progress bar进度条开始
   NProgress.start()
 
@@ -26,33 +28,51 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      // 确定用户是否通过getInfo获得权限角色
-      const hasGetUserInfo = store.getters.name
-      if (hasGetUserInfo) {
+
+      // 权限
+      const hasRoles = store.getters.roles && store.getters.roles.length > 0
+      if (hasRoles) {
         next()
       } else {
         try {
-          // get user info获取用户信息
-          // 实际是请求用户信息后返回，这里模拟数据直接从store中拿
-          await store.dispatch('user/getInfo')
-          next()
+          // get user info
+          // 注意：角色必须是一个对象数组！ such as: ['admin'] or ,['developer','editor']
+          const { roles } = await store.dispatch('user/getInfo')
+          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
 
-          // 就是这里导致登录不了的
-          // const { roles } = await store.dispatch('user/getInfo')
-          // //方法generateRoutes在store/modules/permission.js
-					// const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-          // //生成可访问的路由表
-					// router.addRoutes(accessRoutes) //动态添加可访问路由表
-					// next({ ...to, replace: true })  //hack方法 确保addRoutes已完成
+          // 动态添加可访问路由
+          router.addRoutes(accessRoutes)
 
+          // hack方法确保addRoutes完成
+          // 将replace:true设置为true，这样导航将不会留下历史记录
+          next({ ...to, replace: true })
         } catch (error) {
-          // 删除token,进入登录页面重新登录
+          // 删除token令牌并转到登录页面重新登录
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
           NProgress.done()
         }
       }
+
+      // 确定用户是否通过getInfo获得权限角色
+      // const hasGetUserInfo = store.getters.name
+      // if (hasGetUserInfo) {
+      //   next()
+      // } else {
+      //   try {
+      //     // get user info获取用户信息
+      //     // 实际是请求用户信息后返回，这里模拟数据直接从store中拿
+      //     await store.dispatch('user/getInfo')
+      //     next()
+      //   } catch (error) {
+      //     // 删除token,进入登录页面重新登录
+      //     await store.dispatch('user/resetToken')
+      //     Message.error(error || 'Has Error')
+      //     next(`/login?redirect=${to.path}`)
+      //     NProgress.done()
+      //   }
+      // }
     }
   } else {
     /* has no token*/

@@ -30,6 +30,10 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  // 权限--不知道有没有用
+  SET_INTRODUCTION: (state, introduction) => {
+    state.introduction = introduction
   }
 }
 
@@ -62,10 +66,6 @@ const actions = {
         if (!data) {
           return reject('验证失败，请重新登录！')
         }
-
-        // const { name, avatar } = data
-        // commit('SET_NAME', name)
-        // commit('SET_AVATAR', avatar)
 
         const { roles, name, avatar, introduction } = data
         if (!roles || roles.length <= 0) {
@@ -100,12 +100,36 @@ const actions = {
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
+      commit('SET_TOKEN', '')
+      commit('SET_ROLES', [])
       removeToken() // must remove  token  first
-      commit('RESET_STATE')
+      // commit('RESET_STATE')
       resolve()
     })
+  },
+
+  // 权限，动态修改权限
+  async changeRoles({ commit, dispatch }, role) {
+    const token = role + '-token'
+
+    commit('SET_TOKEN', token)
+    setToken(token)
+
+    const { roles } = await dispatch('getInfo')
+
+    resetRouter()
+
+    // 基于角色生成可访问路线图
+    const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
+    // dynamically add accessible routes
+    router.addRoutes(accessRoutes)
+
+    // 重置访问的视图和缓存的视图
+    dispatch('tagsView/delAllViews', null, { root: true })
   }
+
 }
+
 
 export default {
   namespaced: true,
